@@ -34,14 +34,14 @@ const userSchema = new mongoose.Schema({
     hash_password: {
         type: String,
         required: true,
-    },
+    }/* ,
     role: {
         type: String,
         enum: ["admin", "user"],
         default: "user"
     },
     contactNo: { type: String },
-    profilePicUrl: { type: String },
+    profilePicUrl: { type: String }, */
 }, { timestamps: true });
 
 userSchema.virtual("password").set(function (password) {

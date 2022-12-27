@@ -6,9 +6,9 @@ import Signin from './pages/signin/signin';
 import PrivateRoute from './components/HOC/private_route';
 import { useDispatch, useSelector } from 'react-redux';
 import { isUserLoggedIn } from './actions/auth_actions';
-import Products from './pages/products/product';
-import Categories from './pages/categories/categories';
-import Orders from './pages/orders/orders';
+import RecipeView from './pages/recipe_view/recipe_view';
+import Signup from './pages/signup/signup';
+
 
 
 function App() {
@@ -29,19 +29,12 @@ function App() {
             <PrivateRoute>
               <Home />
             </PrivateRoute>} />
-          <Route path="/categories" exact element={
+          <Route path="/recipe:id" exact element={
             <PrivateRoute>
-              <Categories />
-            </PrivateRoute>} />
-          <Route path="/products" exact element={
-            <PrivateRoute>
-              <Products />
-            </PrivateRoute>} />
-          <Route path="/orders" exact element={
-            <PrivateRoute>
-              <Orders />
+              <RecipeView />
             </PrivateRoute>} />
           <Route path="/signin" element={<Signin />} />
+          <Route path="/signup" element={<Signup />} />
         </Routes>
       </Router>
     </div>

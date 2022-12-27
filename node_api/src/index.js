@@ -8,12 +8,10 @@ const cors = require('cors');
 require("dotenv/config");
 
 const authRoute = require("./routers/auth_route");
-const categoryRoute = require("./routers/category_route");
-const productRoute = require('./routers/product_router');
-const cartRoute = require('./routers/cart_route');
+const recipeRoute = require('./routers/recipe_router');
 
 try {
-    //connect
+    //connect mongo db
     mongoose.connect(`mongodb+srv://${process.env.MONGO_DB_USER}:${process.env.MONGO_DB_PASSWORD}@cluster0.zzy6ea2.mongodb.net/${process.env.MONGO_DB_DATABASE}?retryWrites=true&w=majority`,
         {
             useNewUrlParser: true,
@@ -31,10 +29,9 @@ app.use(express.static(path.join(__dirname, 'public/uploads')))
 app.use(helmet());
 app.use(morgan('tiny'));
 
-app.use("/api/v1/", cartRoute);
+
 app.use("/api/v1/", authRoute);
-app.use("/api/v1/", categoryRoute);
-app.use("/api/v1/", productRoute);
+app.use("/api/v1/", recipeRoute);
 
 app.listen(process.env.PORT, () => {
     console.log(`Server is running on http://localhost:${process.env.PORT}`);
