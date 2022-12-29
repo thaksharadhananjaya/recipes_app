@@ -12,7 +12,7 @@ const initState = {
 }
 
 const recipeReducer = (state = initState, action) => {
-    console.log(action.type);
+
     switch (action.type) {
         case recipeActionsType.REQUEST_RECIPES:
             state = {

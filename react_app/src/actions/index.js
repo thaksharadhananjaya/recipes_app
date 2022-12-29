@@ -1,2 +1,2 @@
 export * from './auth_actions';
-export * from './category_action';
+export * from './recipes_actions';
