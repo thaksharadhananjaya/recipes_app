@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Layout from '../../components/layouts/layout';
 import { useDispatch, useSelector } from 'react-redux';
 import { addRecipe, getAllRecipes, setRecipe } from '../../actions/recipes_action';
-import {  Col, Container, Row } from 'react-bootstrap';
+import { Col, Container, Row } from 'react-bootstrap';
 import styled from "styled-components";
 import Input from '../../components/input';
 import CustomModel from '../../components/custom_model';
@@ -11,6 +11,7 @@ import { useNavigate } from 'react-router-dom';
 import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
 import Message from '../../components/message';
+import notrecipeImg from '../../assets/not_recipe.png';
 
 export default function Home() {
   const dispatch = useDispatch();
@@ -28,7 +29,7 @@ export default function Home() {
     dispatch(getAllRecipes());
   }, []);
 
-  
+
 
   const handleClose = () => setShowAddModel(false);
   const handleShow = () => setShowAddModel(true);
@@ -76,9 +77,9 @@ export default function Home() {
 
   return (
     <Layout>
-{/* Add success message */}
-<Message show={showAddAlert} variant='primary' message='Recipe add successful!' onClose={() => setAddAlertShow(false)} />
-      <Container style={{
+      {/* Add success message */}
+      <Message show={showAddAlert} variant='primary' message='Recipe add successful!' onClose={() => setAddAlertShow(false)} />
+      {!recipes.error && recipes.recipes != null ? <Container style={{
         marginTop: 32,
         marginBottom: 16,
         display: "grid",
@@ -89,7 +90,7 @@ export default function Home() {
         gridRowGap: "50px",
         gridColumnGap: "100px"
       }}>
-        {recipes.recipes != null ? recipes.recipes.map(recipe =>
+        {recipes.recipes.map(recipe =>
           <RecipeCard
             key={recipe._id}
             onClick={() => viewRecipe(recipe)}
@@ -98,13 +99,12 @@ export default function Home() {
             description={recipe.description}
             ingredients={recipe.ingredient}
             image={recipe.image}
-          />) : null}
-      </Container>
-
-
+          />)}
+      </Container> : <center>
+        <NotRecipeImage image={notrecipeImg} />
+      </center>}
       <Fab
         onClick={handleShow}
-
         aria-label="add"
         style={{
           position: 'fixed',
@@ -121,8 +121,8 @@ export default function Home() {
         showAddModel={showAddModel}
         onHide={handleClose}
         add={addNewRecipe}>
-        
-         {/* Error message */}
+
+        {/* Error message */}
         <Message show={showErrorAlert} variant='danger' message='All felids are require!' onClose={() => setErrorAlertShow(false)} />
         <Row>
           <Col>
@@ -146,8 +146,6 @@ export default function Home() {
             />
           </Col>
         </Row>
-
-
         <Row>
           <Col>
             <Input
@@ -172,9 +170,7 @@ export default function Home() {
             />
           </Col>
         </Row>
-
       </CustomModel>
-
     </Layout>
   )
 }
@@ -186,4 +182,13 @@ const Grid = styled.div`
   width: 100%,
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)),
   grid-gap: 12px,
+`;
+
+const NotRecipeImage = styled.div`
+  margin-top: 120;
+  margin-bottom: 16;
+  width:250px;
+  height:300px;
+  background-size: cover;
+  background-image:url('${props => props.image}');
 `;

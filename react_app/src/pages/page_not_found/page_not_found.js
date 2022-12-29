@@ -17,6 +17,5 @@ height:500px;
 width:700px;
 background-position: center;
 background-size: cover;
-background-size: cover;
-background-image:url('${props => props.image}')
+background-image:url('${props => props.image}');
 `;

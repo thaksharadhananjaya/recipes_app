@@ -1,5 +1,6 @@
 import { authActionsType } from "./action_types"
 import axiosInstance from "../helpers/axios"
+import { getAllRecipes } from "./recipes_action";
 
 export const login = (user) => {
     //console.log(user);
@@ -64,6 +65,7 @@ export const signup = (user) => {
                         user
                     }
                 });
+                dispatch(getAllRecipes());
             } else {
                 dispatch({
                     type: authActionsType.SIGNUP_FAILURE,
