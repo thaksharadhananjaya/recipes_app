@@ -211,7 +211,7 @@ const StyledDiv = styled.div`
       position: absolute;
       display:flex;
       bottom: 0;
-      margin-bottom:16px
+      margin-bottom:64px
     }
 
     button{
