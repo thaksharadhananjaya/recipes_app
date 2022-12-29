@@ -1,10 +1,10 @@
 import authReducer from './auth_reducer';
-import catReducer from './category_reducer';
+import recipeReducer from './recipes_reducer';
 import {combineReducers} from 'redux';
 
 const rootReducer = combineReducers({
     auth: authReducer,
-    categories: catReducer
+    recipes: recipeReducer
 });
 
 export default rootReducer;

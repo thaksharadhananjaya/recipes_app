@@ -16,14 +16,6 @@ const userSchema = new mongoose.Schema({
         min: 3,
         max: 20
     },
-    username: {
-        type: String,
-        required: true,
-        trim: true,
-        unique: true,
-        index: true,
-        lowercase: true
-    },
     email: {
         type: String,
         required: true,
@@ -34,14 +26,7 @@ const userSchema = new mongoose.Schema({
     hash_password: {
         type: String,
         required: true,
-    }/* ,
-    role: {
-        type: String,
-        enum: ["admin", "user"],
-        default: "user"
-    },
-    contactNo: { type: String },
-    profilePicUrl: { type: String }, */
+    }
 }, { timestamps: true });
 
 userSchema.virtual("password").set(function (password) {

@@ -40,6 +40,18 @@ const authReducer = (state = initState, action) => {
                 error: action.payload.error,
             }
             break;
+        case authActionsType.REQUEST_SIGNUP:
+            state = {
+                ...state,
+                authenticating: true
+            };
+            break;
+        case authActionsType.SIGNUP_FAILURE:
+            state = {
+                ...initState,
+                error: action.payload.error,
+            }
+            break;
         case authActionsType.REQUEST_LOGOUT:
             state = {
                 ...state,
@@ -50,10 +62,10 @@ const authReducer = (state = initState, action) => {
             state = initState;
             break;
         case authActionsType.LOGOUT_FAILURE:
-            state = { 
-                ...state, 
-                logOuting:false,
-                error: action.payload.error 
+            state = {
+                ...state,
+                logOuting: false,
+                error: action.payload.error
             };
             break;
 

@@ -1,15 +1,18 @@
 import { API_URL } from "../constant";
 import axios from 'axios';
 
-const token = window.localStorage.getItem('token');
+//const token = window.localStorage.getItem('token');
+//console.log(token);
 
-const axiosInstance = axios.create(
+const axiosInstance = axios.create(window.localStorage.getItem('token') ?
     {
         baseURL: API_URL,
-        headers: token ? {
-            'authorization': `Bearer ${token}`
-        }:'',
-    },
+        headers: {
+            'authorization': `Bearer ${window.localStorage.getItem('token')}`
+        },
+    } : {
+        baseURL: API_URL
+    }
 
 );
 

@@ -1,0 +1,13 @@
+textarea:focus,
+input:focus,
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="textarea"]:focus,
+input[type="file"]:focus,
+input[type="email"]:focus,
+.uneditable-input:focus {   
+  border-color: rgba(221, 190, 12, 0.8);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(221, 190, 12, 0.8);
+  outline: 0 none;
+}
+

@@ -3,7 +3,6 @@ const app = express();
 const mongoose = require("mongoose");
 const helmet = require('helmet');
 const morgan = require('morgan');
-const path = require('path');
 const cors = require('cors');
 require("dotenv/config");
 
@@ -25,7 +24,9 @@ try {
 
 app.use(cors());
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'public/uploads')))
+app.use('/images',express.static('public'));
+//app.use(express.static(path.join(__dirname, 'public\\')));
+//app.use("/public", express.static(path.join(__dirname, '/public')))
 app.use(helmet());
 app.use(morgan('tiny'));
 

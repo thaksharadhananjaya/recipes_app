@@ -1,10 +1,10 @@
 const RecipeModel = require('../models/recipe_model');
-
+require("dotenv/config");
 exports.addRecipe = async (req, res) => {
 
     const { name, ingredients, description } = req.body;
     if (req.file) { 
-        var file = `http://localhost/public/uploads/${req.file.filename}`; 
+        var file = `http://localhost:${process.env.PORT}/images/uploads/${req.file.filename}`; 
     }else{
         return res.status(400).json({ message: 'Require image!' });
     }
@@ -33,7 +33,7 @@ exports.updateRecipe = async (req, res) => {
 
     const { name, ingredients, description } = req.body;
     if (req.file)
-        var file = `http://localhost/public/uploads/${req.file.filename}`;
+        var file = `http://localhost:${process.env.PORT}/images/uploads/${req.file.filename}`;
 
     try {
         const recipeModel = RecipeModel({

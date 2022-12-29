@@ -10,7 +10,7 @@ export const login = (user) => {
         });
 
         try {
-            const response = await axiosInstance.post('admin/signin', user);
+            const response = await axiosInstance.post('signin', user);
             if (response.status === 200) {
                 const { token, user } = response.data;
                 localStorage.setItem('token', token);
@@ -42,6 +42,49 @@ export const login = (user) => {
 
     }
 }
+
+export const signup = (user) => {
+    //console.log(user);
+
+    return async (dispatch) => {
+        dispatch({
+            type: authActionsType.REQUEST_SIGNUP,
+        });
+
+        try {
+            const response = await axiosInstance.post('signup', user);
+            if (response.status === 200) {
+                const { token, user } = response.data;
+                localStorage.setItem('token', token);
+                localStorage.setItem('user', JSON.stringify(user));
+                dispatch({
+                    type: authActionsType.LOGIN_SUCCESS,
+                    payload: {
+                        token,
+                        user
+                    }
+                });
+            } else {
+                dispatch({
+                    type: authActionsType.SIGNUP_FAILURE,
+                    payload: {
+                        error: 'Failed to login'
+                    }
+                });
+            }
+        }
+        catch (error) {
+            dispatch({
+                type: authActionsType.SIGNUP_FAILURE,
+                payload: {
+                    error: 'Failed to login'
+                }
+            });
+        }
+
+    }
+}
+
 
 export const isUserLoggedIn = () => {
     return async dispatch => {

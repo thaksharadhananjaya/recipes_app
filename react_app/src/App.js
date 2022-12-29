@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { isUserLoggedIn } from './actions/auth_actions';
 import RecipeView from './pages/recipe_view/recipe_view';
 import Signup from './pages/signup/signup';
+import PageNotFound from './pages/page_not_found/page_not_found';
 
 
 
@@ -29,12 +30,13 @@ function App() {
             <PrivateRoute>
               <Home />
             </PrivateRoute>} />
-          <Route path="/recipe:id" exact element={
+          <Route path="/recipe/:id" exact element={
             <PrivateRoute>
               <RecipeView />
             </PrivateRoute>} />
           <Route path="/signin" element={<Signin />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="*" element={<PageNotFound />} />
         </Routes>
       </Router>
     </div>

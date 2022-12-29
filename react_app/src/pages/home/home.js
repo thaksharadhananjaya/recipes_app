@@ -1,125 +1,189 @@
 import React, { useEffect, useState } from 'react';
-import Layout from '../../components/layout/layout';
+import Layout from '../../components/layouts/layout';
 import { useDispatch, useSelector } from 'react-redux';
-import { addCategory, getAllCategories } from '../../actions/category_action';
-import { Row, Col, Modal, Button, Form } from 'react-bootstrap';
+import { addRecipe, getAllRecipes, setRecipe } from '../../actions/recipes_action';
+import {  Col, Container, Row } from 'react-bootstrap';
 import styled from "styled-components";
 import Input from '../../components/input';
+import CustomModel from '../../components/custom_model';
+import RecipeCard from '../../components/recipe_card';
+import { useNavigate } from 'react-router-dom';
+import Fab from '@mui/material/Fab';
+import AddIcon from '@mui/icons-material/Add';
+import Message from '../../components/message';
 
 export default function Home() {
   const dispatch = useDispatch();
-  const categories = useSelector(state => state.categories);
+  const recipes = useSelector(state => state.recipes);
   const [showAddModel, setShowAddModel] = useState(false);
-  const [name, setCatName] = useState();
-  const [parentID, setParID] = useState();
+  const [name, setRecipeName] = useState();
+  const [ingredients, setIngredients] = useState();
+  const [description, setDescription] = useState();
+  const [image, setImage] = useState();
+  const [showAddAlert, setAddAlertShow] = useState(false);
+  const [showErrorAlert, setErrorAlertShow] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    dispatch(getAllCategories());
+    dispatch(getAllRecipes());
   }, []);
+
+  
 
   const handleClose = () => setShowAddModel(false);
   const handleShow = () => setShowAddModel(true);
+  const handleImage = (e) => setImage(e.target.files[0]);
 
-  const addNewCategory = () => {
-    const category = {
-      name,
-      parentID
-    }
-    console.log(category);
-    setCatName();
-    setParID();
-    dispatch(addCategory(category));
+  const showAddMsgBox = () => {
+    setAddAlertShow(true);
+    setTimeout(() => {
+      setAddAlertShow(false)
+    }, 2000);
   }
 
-  function createCatList(categoriesList) {
 
-    const finalCat = [];
-    for (let cat of categoriesList) {
-      finalCat.push(
-        <li key={cat._id}>
-          {cat.name}
-          {cat.children.length > 0 ? <ul>{createCatList(cat.children)}</ul> : null}
-        </li>
-      );
-    }
-    return finalCat;
+
+  const showErrorMsgBox = () => {
+    setErrorAlertShow(true);
+    setTimeout(() => {
+      setErrorAlertShow(false)
+    }, 2500);
   }
 
-  function createSelectCatList(categories, options = []) {
-    for (let category of categories) {
-      options.push(
-        <option key={category._id} value={category._id}>
-          {category.name}
-        </option>);
-      if (category.children.length > 0) {
-        createSelectCatList(category.children, options);
-      }
-    }
+  const viewRecipe = (recipe) => {
+    dispatch(setRecipe(recipe));
+    navigate(`/recipe/${recipe._id}`);
+  }
 
-    return options.sort();
+  const addNewRecipe = () => {
+    const recipeForm = new FormData();
+    if (name && ingredients && description && image) {
+      recipeForm.append('name', name);
+      recipeForm.append('ingredients', ingredients);
+      recipeForm.append('description', description);
+      recipeForm.append('image', image);
+      dispatch(addRecipe(recipeForm));
+      handleClose();
+      showAddMsgBox()
+      setRecipeName();
+      setDescription();
+      setIngredients();
+      setImage();
+    } else {
+      showErrorMsgBox();
+    }
   }
 
   return (
     <Layout>
-      <Container>
-        <Row>
-          <Col md={12}>
-            <div className='title' >
- 
-              <Button onClick={handleShow}>Add</Button>
-            </div>
-
-          </Col>
-        </Row>
-        <Row>
-          <Col md={12}>
-            <ul>
-              {categories.categories != null ? createCatList(categories.categories) : null}
-            </ul>
-          </Col>
-        </Row>
+{/* Add success message */}
+<Message show={showAddAlert} variant='primary' message='Recipe add successful!' onClose={() => setAddAlertShow(false)} />
+      <Container style={{
+        marginTop: 32,
+        marginBottom: 16,
+        display: "grid",
+        width: "100%",
+        justifyItems: 'center',
+        padding: 0,
+        gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+        gridRowGap: "50px",
+        gridColumnGap: "100px"
+      }}>
+        {recipes.recipes != null ? recipes.recipes.map(recipe =>
+          <RecipeCard
+            key={recipe._id}
+            onClick={() => viewRecipe(recipe)}
+            id={recipe._id}
+            name={recipe.name}
+            description={recipe.description}
+            ingredients={recipe.ingredient}
+            image={recipe.image}
+          />) : null}
       </Container>
 
 
-      <Modal show={showAddModel} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Add Category</Modal.Title>
-        </Modal.Header>
-        <Form.Group className="mb-3" controlId="formBasicEmail">
+      <Fab
+        onClick={handleShow}
 
-          <Input
-            type="text"
-            controlId="catName"
-            placeholder="Enter Category Name"
-            value={name}
-            onChange={(e) => setCatName(e.target.value)}
-          />
+        aria-label="add"
+        style={{
+          position: 'fixed',
+          backgroundColor: "orange",
+          bottom: 20,
+          right: 16
+        }}>
+        <AddIcon style={{ color: 'white' }} />
+      </Fab>
 
-          <select onChange={(e)=> setParID(e.target.value)}>
-            <option >Select parent category</option>
-            {categories.categories != null ? createSelectCatList(categories.categories) : null}
-          </select>
+      {/* Add recipe dialog box */}
+      <CustomModel
+        title='Add Recipe'
+        showAddModel={showAddModel}
+        onHide={handleClose}
+        add={addNewRecipe}>
+        
+         {/* Error message */}
+        <Message show={showErrorAlert} variant='danger' message='All felids are require!' onClose={() => setErrorAlertShow(false)} />
+        <Row>
+          <Col>
+            <Input
+              type="text"
+              controlId="name"
+              label="Name"
+              placeholder="Enter Recipe Name"
+              value={name}
+              onChange={(e) => setRecipeName(e.target.value)}
+            />
+          </Col>
+          <Col>
+            <Input
+              type="file"
+              controlId="image"
+              name="image"
+              label="Image"
+              placeholder="Choose Recipe's Image"
+              onChange={handleImage}
+            />
+          </Col>
+        </Row>
 
-        </Form.Group>
-        <Modal.Footer>
 
-          <Button variant="primary"  onClick={addNewCategory}>
-            Add
-          </Button>
-        </Modal.Footer>
-      </Modal>
+        <Row>
+          <Col>
+            <Input
+              as="textarea"
+              rows={5}
+              controlId="ingredients"
+              label="Ingredients"
+              placeholder="Enter Recipe Ingredients"
+              value={ingredients}
+              onChange={(e) => setIngredients(e.target.value)}
+            />
+          </Col>
+          <Col>
+            <Input
+              as="textarea"
+              rows={5}
+              controlId="description"
+              label="Description"
+              placeholder="Enter Recipe Description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+          </Col>
+        </Row>
 
+      </CustomModel>
 
     </Layout>
   )
 }
 
-
-const Container = styled.div`
-    .title{
-      display: flex;
-      justify-content: space-between;
-      margin-top: 8px;
-      margin-bottom: 16px
-    }
+const Grid = styled.div`
+  margin-top: 100,
+  margin-bottom: 16,
+  display: grid,
+  width: 100%,
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)),
+  grid-gap: 12px,
 `;
