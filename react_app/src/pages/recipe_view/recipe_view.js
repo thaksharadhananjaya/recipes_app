@@ -14,6 +14,8 @@ import Message from '../../components/message';
 export default function RecipeView() {
   const { id } = useParams();
   const dispatch = useDispatch();
+  console.log(id);
+  
   useEffect(() => {
     console.log("useEffect called");
     dispatch(getRecipe(id));
@@ -90,7 +92,7 @@ export default function RecipeView() {
     showDeleteMsgBox();
   }
 
-  if (recipe === 'deleted')
+  if (!recipe || recipe === 'deleted')
     return <Navigate to='/' />
 
 
@@ -106,7 +108,7 @@ export default function RecipeView() {
         <Container fluid>
           <Row>
             <Col>
-              <RecipeImage image={recipe.image} />
+              <RecipeImage image={recipe? recipe.image:''} />
 
             </Col>
 
