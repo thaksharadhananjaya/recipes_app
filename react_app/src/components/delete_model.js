@@ -17,7 +17,7 @@ export default function DeleteModel(props) {
                 <Modal.Header closeButton>
                     <Modal.Title>Delete</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>Do you need to delete this recipe ?</Modal.Body>
+                <Modal.Body>Are you sure you want to delete the recipe?</Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={props.handleClose}>
                         No
