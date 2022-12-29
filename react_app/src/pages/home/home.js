@@ -175,14 +175,6 @@ export default function Home() {
   )
 }
 
-const Grid = styled.div`
-  margin-top: 100,
-  margin-bottom: 16,
-  display: grid,
-  width: 100%,
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)),
-  grid-gap: 12px,
-`;
 
 const NotRecipeImage = styled.div`
   margin-top: 120;
